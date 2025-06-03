@@ -1,0 +1,54 @@
+# =====================
+# 📦 Thư mục của Node.js
+# =====================
+node_modules/      # Thư viện cài bằng npm, không cần đẩy lên Git vì có thể cài lại
+
+# =====================
+# 🔐 File chứa thông tin bí mật
+# =====================
+.env               # Chứa thông tin quan trọng như mật khẩu database, token, API key
+
+# =====================
+# 🪵 File log (ghi lại lỗi hoặc hoạt động của app)
+# =====================
+*.log              # Tất cả file đuôi .log
+logs               # Thư mục logs (nếu có)
+npm-debug.log*     # Log khi npm gặp lỗi
+yarn-debug.log*
+yarn-error.log*
+
+# =====================
+# 🧹 Các file tạm, file cache
+# =====================
+.eslintcache       # Cache của ESLint (kiểm tra lỗi code)
+*.tmp              # File tạm
+*.swp              # File tạm khi dùng editor như Vim
+
+# =====================
+# 🧱 File build ra (nếu có bước biên dịch)
+# =====================
+dist/              # Thư mục chứa file đã build
+build/             # Thư mục build (thường dùng với frontend)
+
+# =====================
+# 📊 Báo cáo kiểm thử (test coverage)
+# =====================
+coverage/          # Tạo ra sau khi chạy test
+
+# =====================
+# ⚙️ Cài đặt riêng của VSCode
+# =====================
+.vscode/           # Thư mục chứa cài đặt riêng trên máy bạn
+
+# =====================
+# 💻 File hệ thống (rác của máy tính)
+# =====================
+.DS_Store          # File của macOS
+Thumbs.db          # File của Windows
+
+# =====================
+# 🖼 File tải lên từ người dùng (nếu có chức năng upload)
+# =====================
+public/uploads/            # Thư mục ảnh người dùng tải lên
+public/img/uploads/
+
