@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <title>Danh sách khách hàng</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap');
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html, body {
+      margin: 0; padding: 0;
+      height: 100%;
+      font-family: 'Inter', Arial, sans-serif;
+      background: linear-gradient(to right, #2980b9, #6dd5fa);
+      color: #333;
+      display: flex;
+      flex-direction: column;
+    }
+
+    body {
+      padding: 60px 20px 40px;
+      flex-grow: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      width: 100%;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    h2 {
+      font-weight: 700;
+      color: #000000;
+      margin-bottom: 32px;
+      text-align: center;
+      letter-spacing: 0.07em;
+      font-size: 2rem;
+      user-select: none;
+      text-shadow: 0 0 10px rgba(255 255 255 / 0.7);
+      width: 100%;
+      max-width: 1200px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: separate;
+      border-spacing: 0 14px;
+      background: none;
+      box-shadow: none;
+      border-radius: 0;
+      font-size: 1rem;
+      color: #333;
+    }
+
+    thead tr {
+      background-color: #624ad9;
+      color: #f8f8f8;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      user-select: none;
+    }
+
+    th, td {
+      padding: 16px 24px;
+      text-align: left;
+      vertical-align: middle;
+      border: none;
+    }
+
+    tbody tr {
+      background-color: #fff;
+      transition: background-color 0.35s ease, box-shadow 0.35s ease;
+      cursor: default;
+      border-radius: 8px;
+      box-shadow: 0 3px 6px rgb(0 0 0 / 0.05);
+    }
+
+    tbody tr:hover {
+      background-color: #d9d2ff;
+      box-shadow: 0 10px 20px rgb(98 74 217 / 0.3);
+    }
+
+    select {
+      padding: 8px 14px;
+      border-radius: 8px;
+      border: 1.5px solid #b2a1d6;
+      background-color: #f3eaff;
+      font-weight: 600;
+      cursor: pointer;
+      color: #4b3f72;
+      appearance: none;
+      position: relative;
+      transition: border-color 0.3s ease, background-color 0.3s ease;
+      background-image: url('data:image/svg+xml;utf8,<svg fill="%234b3f72" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M7 10l5 5 5-5z"/></svg>');
+      background-repeat: no-repeat;
+      background-position: right 12px center;
+      background-size: 16px 16px;
+    }
+
+    select:hover, select:focus {
+      border-color: #382f5a;
+      background-color: #dbceff;
+      outline: none;
+    }
+
+    a.logout {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      display: inline-flex;
+      align-items: center;
+      color: #fff;
+      text-decoration: none;
+      font-weight: 700;
+      font-size: 1.25rem;
+      transition: color 0.3s ease, background-color 0.3s ease;
+      user-select: none;
+      z-index: 1000;
+      background: #7a56ff;
+      padding: 12px 20px;
+      border-radius: 16px;
+      box-shadow: 0 6px 12px rgba(122, 86, 255, 0.6);
+      letter-spacing: 0.05em;
+    }
+
+    a.logout svg {
+      margin-right: 10px;
+      fill: #fff;
+      transition: fill 0.3s ease;
+      width: 24px;
+      height: 24px;
+    }
+
+    a.logout:hover {
+      color: #d1caff;
+      background: #5e3ed1;
+      box-shadow: 0 8px 16px rgba(94, 62, 209, 0.8);
+    }
+    a.logout:hover svg {
+      fill: #d1caff;
+    }
+
+    p.empty {
+      text-align: center;
+      font-style: italic;
+      color: #cfc9f7;
+      font-size: 1.1rem;
+      user-select: none;
+      width: 100%;
+      max-width: 1200px;
+    }
+
+    .pagination {
+      margin-top: 24px;
+      display: flex;
+      justify-content: center;
+      gap: 12px;
+      user-select: none;
+    }
+
+    .pagination button {
+      padding: 8px 14px;
+      border-radius: 8px;
+      border: none;
+      background: #624ad9;
+      color: #f8f8f8;
+      font-weight: 600;
+      cursor: pointer;
+      box-shadow: 0 2px 6px rgb(98 74 217 / 0.6);
+      transition: background-color 0.3s ease;
+      min-width: 36px;
+    }
+
+    .pagination button:hover:not(:disabled) {
+      background-color: #8c73ff;
+    }
+
+    .pagination button:disabled {
+      background-color: #a49ae0;
+      cursor: default;
+      box-shadow: none;
+    }
+  </style>
+</head>
+<body>
+  <h2>📋 Danh sách khách hàng</h2>
+
+  <% if (!customers || customers.length === 0) { %>
+    <p class="empty">Chưa có khách hàng nào.</p>
+  <% } else { %>
+    <table id="customerTable">
+      <thead>
+        <tr>
+          <th>NGÀY</th>
+          <th>ID KHÁCH HÀNG</th>
+          <th>SDT</th>
+          <th>YÊU CẦU</th>
+          <th>LỜI NHẮN</th>
+          <th>TRẠNG THÁI TƯ VẤN</th>
+        </tr>
+      </thead>
+      <tbody id="tableBody">
+        <% customers.forEach(customer => { %>
+        <tr>
+          <td><%= customer.date || '—' %></td>
+          <td><%= customer.id %></td>
+          <td><%= customer.phone || '—' %></td>
+          <td><%= customer.designType || '—' %></td>
+          <td><%= customer.message || '—' %></td>
+          <td>
+            <form method="POST" action="/admin/customers/<%= customer.id %>/consulted">
+              <select name="consulted" onchange="this.form.submit()" aria-label="Chọn trạng thái tư vấn">
+                <option value="0" <%= customer.consulted === 0 ? "selected" : "" %>>Chưa tư vấn</option>
+                <option value="1" <%= customer.consulted === 1 ? "selected" : "" %>>Đã tư vấn</option>
+              </select>
+            </form>
+          </td>
+        </tr>
+        <% }) %>
+      </tbody>
+    </table>
+
+    <div class="pagination" id="pagination"></div>
+  <% } %>
+
+  <a href="/admin/logout" class="logout" aria-label="Đăng xuất">
+    <svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24" width="24">
+      <path d="M16 13v-2H7V8l-5 4 5 4v-3zM20 19h-8v-2h8V7h-8V5h8a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2z"/>
+    </svg>
+    Đăng xuất
+  </a>
+
+<script>
+  const rowsPerPage = 5;
+  const tableBody = document.getElementById('tableBody');
+  const pagination = document.getElementById('pagination');
+
+  if (tableBody && pagination) {
+    const rows = Array.from(tableBody.querySelectorAll('tr'));
+    const pageCount = Math.ceil(rows.length / rowsPerPage);
+
+    function showPage(page) {
+      const start = (page - 1) * rowsPerPage;
+      const end = start + rowsPerPage;
+      rows.forEach((row, idx) => {
+        row.style.display = idx >= start && idx < end ? '' : 'none';
+      });
+      renderPagination(page);
+    }
+
+    function renderPagination(activePage) {
+      pagination.innerHTML = '';
+
+      const prevBtn = document.createElement('button');
+      prevBtn.textContent = '‹';
+      prevBtn.disabled = activePage === 1;
+      prevBtn.onclick = () => showPage(activePage - 1);
+      pagination.appendChild(prevBtn);
+
+      for (let i = 1; i <= pageCount; i++) {
+        const btn = document.createElement('button');
+        btn.textContent = i;
+        if (i === activePage) btn.disabled = true;
+        btn.onclick = () => showPage(i);
+        pagination.appendChild(btn);
+      }
+
+      const nextBtn = document.createElement('button');
+      nextBtn.textContent = '›';
+      nextBtn.disabled = activePage === pageCount;
+      nextBtn.onclick = () => showPage(activePage + 1);
+      pagination.appendChild(nextBtn);
+    }
+
+    showPage(1); // Bắt đầu hiển thị trang 1
+  }
+</script>
+</body>
+</html>
